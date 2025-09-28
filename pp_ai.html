@@ -241,21 +241,6 @@ const L={
   }
 };
 
-function setLang(code){
-  const d=L[code]||L.en;
-  document.documentElement.lang=code;
-  document.querySelector("[data-i18n='title']").textContent=d.title;
-  document.querySelector("[data-i18n='updated']").textContent=d.updated;
-  const keys=["p1","p2","p3","p4","p5","p6"];
-  document.querySelectorAll("#points li").forEach((li,i)=>li.textContent=d[keys[i]]);
-  const links=document.querySelector("[data-i18n='links']");
-  links.innerHTML=d.links
-    .replace(/Privacy|Политика|Datenschutz|Confidentialité|Privacy/,
-             `<a href="${PRIVACY_URL}">$&</a>`)
-    .replace(/Terms|Условия|AGB|Conditions|Termini|Умови/,
-             `<a href="${TERMS_URL}">$&</a>`);
-  document.querySelector("[data-i18n='lang']").textContent=d.lang;
-}
 
 // Language init: ?lang= has priority, else system
 const urlLang=new URLSearchParams(location.search).get("lang");
