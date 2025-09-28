@@ -169,8 +169,7 @@ const API_ENDPOINT = ""; // ← оставь пустым, если отправ
 // Основной почтовый адрес поддержки
 const SUPPORT_EMAIL = "support@example.com";
 // Ссылки "Политика"/"Условия"
-const PRIVACY_URL = "https://example.com/privacy";
-const TERMS_URL   = "https://example.com/terms";
+
 /* ================================================== */
 
 // Локализации
@@ -314,8 +313,7 @@ function setLang(code){
 }
 
 // init links
-qs("#privacyLink").href = PRIVACY_URL;
-qs("#termsLink").href = TERMS_URL;
+
 
 // select language
 const urlLang = new URLSearchParams(location.search).get("lang");
