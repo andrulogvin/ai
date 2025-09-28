@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Support • AIPlanner</title>
+<style>
+  :root{
+    --bg-grad-1:#eef5ff; --bg-grad-2:#f7f9ff;
+    --card:#ffffff; --text:#111827; --muted:#6b7280; --accent:#1677ff;
+    --accent-weak:#1677ff22; --ok:#0ea5e9; --warn:#f59e0b; --err:#ef4444;
+    --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:var(--text);
+    background: radial-gradient(1600px 800px at 20% -10%, var(--bg-grad-1), transparent),
+                radial-gradient(1400px 700px at 120% 0%, var(--bg-grad-2), #fff);
+  }
+  .wrap{min-height:100%; display:grid; place-items:center; padding:24px}
+  .card{
+    width:min(880px, 100%); background:var(--card); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:22px 20px;
+  }
+  .header{display:flex; gap:14px; align-items:center; padding:6px 4px 12px}
+  .logo{
+    width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
+    background:linear-gradient(180deg, #fff7e6, #ffe4bf);
+    box-shadow:inset 0 1px 0 #fff8, 0 1px 0 #00000010;
+    font-size:24px;
+  }
+  h1{margin:0; font-size:26px; line-height:1.1}
+  .sub{margin:4px 0 0; color:var(--muted); font-size:14px}
+  form{margin-top:12px; display:grid; gap:14px}
+  .row{display:grid; gap:10px}
+  label{font-weight:600; font-size:14px}
+  .muted{color:var(--muted); font-weight:500}
+  input[type="text"], input[type="email"], textarea, select{
+    width:100%; border:1px solid #e5e7eb; border-radius:12px; padding:12px 14px;
+    font:inherit; background:#fafafa;
+  }
+  textarea{min-height:140px; resize:vertical}
+  .chips{display:flex; gap:8px; flex-wrap:wrap}
+  .chip{
+    border-radius:999px; padding:8px 12px; border:1px solid #e5e7eb; cursor:pointer;
+    user-select:none; font-size:14px; background:#fff;
+  }
+  .chip.active{border-color:var(--accent); background:var(--accent-weak); color:var(--text)}
+  .files{display:flex; align-items:center; gap:10px}
+  .hint{font-size:12px; color:var(--muted)}
+  .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .btn{
+    appearance:none; border:0; border-radius:12px; padding:12px 18px; font-weight:700;
+    background:var(--accent); color:white; cursor:pointer;
+  }
+  .btn:disabled{opacity:.6; cursor:not-allowed}
+  .ghost{background:#f4f6fb; color:#111827}
+  .alert{padding:12px 14px; border-radius:12px; font-size:14px; line-height:1.3}
+  .ok{background:#ecfeff; border:1px solid #cffafe}
+  .err{background:#fff1f2; border:1px solid #ffe4e6}
+  .foot{display:flex; gap:10px; justify-content:space-between; align-items:center; margin-top:6px}
+  .lang{display:flex; gap:8px; align-items:center}
+  .center{display:grid; place-items:center; text-align:center}
+  .spinner{width:18px; height:18px; border:2px solid #ffffff88; border-top-color:#fff; border-radius:50%; animation:sp 1s linear infinite; display:inline-block; vertical-align:-3px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  /* responsive */
+  @media (min-width: 720px){
+    .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card" role="region" aria-labelledby="hdr">
+    <div class="header">
+      <div class="logo" aria-hidden="true">🧑‍🍳</div>
+      <div>
+        <h1 id="hdr" data-i18n="title">Support & Feedback</h1>
+        <div class="sub" data-i18n="subtitle">Tell us what's up — we usually reply within 24h.</div>
+      </div>
+    </div>
+
+    <form id="form" novalidate>
+      <div class="row">
+        <label data-i18n="topic">Topic</label>
+        <div class="chips" id="chips">
+          <div class="chip active" data-value="bug">🐞 <span data-i18n="chip_bug">Bug</span></div>
+          <div class="chip" data-value="idea">💡 <span data-i18n="chip_idea">Idea</span></div>
+          <div class="chip" data-value="billing">💳 <span data-i18n="chip_billing">Billing</span></div>
+          <div class="chip" data-value="other">✉️ <span data-i18n="chip_other">Other</span></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="row">
+          <label for="email" data-i18n="email_label">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+        <div class="row">
+          <label for="name" data-i18n="name_label">Name</label>
+          <input id="name" name="name" type="text" placeholder="John Doe" autocomplete="name" />
+        </div>
+      </div>
+
+      <div class="row">
+        <label for="subject" data-i18n="subject_label">Subject</label>
+        <input id="subject" name="subject" type="text" placeholder="Short summary" required />
+      </div>
+
+      <div class="row">
+        <label for="message" data-i18n="message_label">Message</label>
+        <textarea id="message" name="message" placeholder="Describe the problem or idea…" required></textarea>
+        <div class="hint" data-i18n="message_hint">Include steps to reproduce, screenshots, or links if helpful.</div>
+      </div>
+
+      <div class="row files">
+        <label class="muted" for="file"><span data-i18n="attach">Attach file (optional)</span></label>
+        <input id="file" name="file" type="file" />
+      </div>
+
+      <div class="row">
+        <label class="muted">
+          <input type="checkbox" id="consent" required />
+          <span data-i18n="consent">I agree to the processing of my data per the Privacy Policy.</span>
+        </label>
+      </div>
+
+      <div id="alert" class="alert" style="display:none"></div>
+
+      <div class="actions">
+        <button class="btn" id="sendBtn" type="submit">
+          <span class="btn-text" data-i18n="send">Send</span>
+        </button>
+        <button class="btn ghost" id="mailBtn" type="button">
+          <span data-i18n="send_mail">Send via Mail</span>
+        </button>
+        <span class="hint" data-i18n="send_hint">If online send via in-app; otherwise use your mail client.</span>
+      </div>
+    </form>
+
+    <div class="foot">
+      <div class="muted">
+        <a id="privacyLink" href="#" target="_blank" rel="noopener">Privacy</a> ·
+        <a id="termsLink" href="#" target="_blank" rel="noopener">Terms</a>
+      </div>
+      <div class="lang">
+        <span class="muted" data-i18n="lang">Language</span>
+        <select id="langSel">
+          <option value="system">System</option>
+          <option value="ru">Русский</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="it">Italiano</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== CONFIG ===================== */
+// Если у тебя есть сервер/форм-сервис — укажи URL сюда.
+// Пример Formspree: https://formspree.io/f/xxxxx
+const API_ENDPOINT = ""; // ← оставь пустым, если отправляем через mailto
+// Основной почтовый адрес поддержки
+const SUPPORT_EMAIL = "support@example.com";
+// Ссылки "Политика"/"Условия"
+const PRIVACY_URL = "https://example.com/privacy";
+const TERMS_URL   = "https://example.com/terms";
+/* ================================================== */
+
+// Локализации
+const L = {
+  ru:{
+    title:"Поддержка и обратная связь",
+    subtitle:"Опишите проблему или идею — обычно отвечаем в течение 24 часов.",
+    topic:"Тема",
+    chip_bug:"Баг",
+    chip_idea:"Идея",
+    chip_billing:"Оплата",
+    chip_other:"Другое",
+    email_label:"Email",
+    name_label:"Имя",
+    subject_label:"Тема сообщения",
+    message_label:"Сообщение",
+    message_hint:"Добавьте шаги воспроизведения, скриншоты или ссылки — если это поможет.",
+    attach:"Прикрепить файл (необязательно)",
+    consent:"Согласен(на) на обработку данных согласно Политике конфиденциальности.",
+    send:"Отправить",
+    send_mail:"Отправить через почту",
+    send_hint:"Онлайн — отправьте внутри приложения; офлайн — через почтовый клиент.",
+    lang:"Язык",
+    ok:"Спасибо! Мы получили ваше сообщение. Номер заявки: ",
+    err:"Не удалось отправить. Попробуйте позже или отправьте через почту.",
+    fill:"Заполните обязательные поля."
+  },
+  en:{
+    title:"Support & Feedback",
+    subtitle:"Tell us what's up — we usually reply within 24h.",
+    topic:"Topic",
+    chip_bug:"Bug",
+    chip_idea:"Idea",
+    chip_billing:"Billing",
+    chip_other:"Other",
+    email_label:"Email",
+    name_label:"Name",
+    subject_label:"Subject",
+    message_label:"Message",
+    message_hint:"Add steps to reproduce, screenshots, or links if helpful.",
+    attach:"Attach file (optional)",
+    consent:"I agree to the processing of my data per the Privacy Policy.",
+    send:"Send",
+    send_mail:"Send via Mail",
+    send_hint:"Online? Send in-app; otherwise use your mail client.",
+    lang:"Language",
+    ok:"Thanks! We received your message. Ticket: ",
+    err:"Could not send. Please try later or use email.",
+    fill:"Please fill required fields."
+  },
+  de:{
+    title:"Support & Feedback",
+    subtitle:"Beschreibe dein Anliegen – wir antworten in der Regel innerhalb von 24 h.",
+    topic:"Thema",
+    chip_bug:"Fehler",
+    chip_idea:"Idee",
+    chip_billing:"Abrechnung",
+    chip_other:"Sonstiges",
+    email_label:"E-Mail",
+    name_label:"Name",
+    subject_label:"Betreff",
+    message_label:"Nachricht",
+    message_hint:"Füge Schritte, Screenshots oder Links hinzu – falls hilfreich.",
+    attach:"Datei anhängen (optional)",
+    consent:"Ich stimme der Verarbeitung meiner Daten gemäß Datenschutz zu.",
+    send:"Senden",
+    send_mail:"Per Mail senden",
+    send_hint:"Online im App senden; offline mit Mail-Client.",
+    lang:"Sprache",
+    ok:"Danke! Wir haben deine Nachricht erhalten. Ticket: ",
+    err:"Senden fehlgeschlagen. Später erneut versuchen oder E-Mail nutzen.",
+    fill:"Bitte Pflichtfelder ausfüllen."
+  },
+  fr:{
+    title:"Assistance & avis",
+    subtitle:"Expliquez votre problème ou idée — réponse sous 24 h.",
+    topic:"Sujet",
+    chip_bug:"Bug",
+    chip_idea:"Idée",
+    chip_billing:"Facturation",
+    chip_other:"Autre",
+    email_label:"E-mail",
+    name_label:"Nom",
+    subject_label:"Objet",
+    message_label:"Message",
+    message_hint:"Ajoutez étapes, captures d’écran ou liens si utile.",
+    attach:"Joindre un fichier (facultatif)",
+    consent:"J’accepte le traitement de mes données selon la Politique de confidentialité.",
+    send:"Envoyer",
+    send_mail:"Envoyer par e-mail",
+    send_hint:"En ligne : envoyez via l’app ; hors-ligne : par e-mail.",
+    lang:"Langue",
+    ok:"Merci ! Message reçu. Ticket : ",
+    err:"Envoi impossible. Réessayez plus tard ou utilisez l’e-mail.",
+    fill:"Veuillez remplir les champs requis."
+  },
+  it:{
+    title:"Supporto & feedback",
+    subtitle:"Raccontaci il problema o l’idea — rispondiamo entro 24 h.",
+    topic:"Argomento",
+    chip_bug:"Bug",
+    chip_idea:"Idea",
+    chip_billing:"Fatturazione",
+    chip_other:"Altro",
+    email_label:"Email",
+    name_label:"Nome",
+    subject_label:"Oggetto",
+    message_label:"Messaggio",
+    message_hint:"Aggiungi passaggi, screenshot o link se utile.",
+    attach:"Allega file (facoltativo)",
+    consent:"Accetto il trattamento dei dati come da Privacy Policy.",
+    send:"Invia",
+    send_mail:"Invia via email",
+    send_hint:"Online: invia nell’app; offline: usa il client email.",
+    lang:"Lingua",
+    ok:"Grazie! Abbiamo ricevuto il messaggio. Ticket: ",
+    err:"Invio non riuscito. Riprova più tardi o usa l’email.",
+    fill:"Compila i campi obbligatori."
+  }
+};
+
+// i18n helpers
+const qs = s => document.querySelector(s);
+function setLang(code){
+  const dict = L[code] || L.en;
+  document.documentElement.lang = code;
+  for (const el of document.querySelectorAll("[data-i18n]")){
+    const k = el.getAttribute("data-i18n");
+    if (dict[k]) el.textContent = dict[k];
+  }
+  qs("#subject").placeholder = dict.subject_label === "Subject" ? "Short summary" :
+                               dict.subject_label === "Тема сообщения" ? "Краткое описание" :
+                               dict.subject_label === "Betreff" ? "Kurze Zusammenfassung" :
+                               dict.subject_label === "Objet" ? "Brève description" : "Breve sommario";
+  qs("#message").placeholder = dict.message_label === "Сообщение" ? "Опишите проблему или идею…" :
+                               dict.message_label === "Nachricht" ? "Beschreibe kurz dein Anliegen…" :
+                               dict.message_label === "Message" ? "Describe the problem or idea…" :
+                               dict.message_label === "Messaggio" ? "Descrivi problema o idea…" :
+                               "Décrivez le problème ou l’idée…";
+  return dict;
+}
+
+// init links
+qs("#privacyLink").href = PRIVACY_URL;
+qs("#termsLink").href = TERMS_URL;
+
+// select language
+const urlLang = new URLSearchParams(location.search).get("lang");
+const sysLang = (navigator.language || "en").slice(0,2);
+const initial = (["ru","en","de","fr","it"].includes(urlLang||"") ? urlLang : null) || (["ru","en","de","fr","it"].includes(sysLang)?sysLang:"en");
+qs("#langSel").value = urlLang || "system";
+let currentDict = setLang(initial);
+qs("#langSel").addEventListener("change", (e)=>{
+  const v = e.target.value;
+  currentDict = setLang(v==="system" ? initial : v);
+});
+
+// chips
+const chips = qs("#chips");
+let topic = "bug";
+chips.addEventListener("click", (e)=>{
+  const c = e.target.closest(".chip"); if(!c) return;
+  for(const el of chips.children) el.classList.remove("active");
+  c.classList.add("active");
+  topic = c.dataset.value;
+});
+
+// form
+const form = qs("#form");
+const sendBtn = qs("#sendBtn");
+const mailBtn = qs("#mailBtn");
+const alertBox = qs("#alert");
+function showAlert(ok,text){
+  alertBox.className = "alert " + (ok ? "ok" : "err");
+  alertBox.textContent = text;
+  alertBox.style.display = "block";
+}
+function hideAlert(){ alertBox.style.display = "none"; }
+
+function busy(on){
+  sendBtn.disabled = on;
+  sendBtn.querySelector(".btn-text").innerHTML = on ? `<span class="spinner"></span>` : currentDict.send;
+}
+
+function ticketId(){ return Math.random().toString(36).slice(2,8).toUpperCase(); }
+
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault(); hideAlert();
+  const fd = new FormData(form);
+  if(!fd.get("email") || !fd.get("subject") || !fd.get("message") || !qs("#consent").checked){
+    showAlert(false, currentDict.fill); return;
+  }
+
+  const payload = {
+    topic, email:fd.get("email"), name:fd.get("name"),
+    subject:fd.get("subject"), message:fd.get("message"),
+    userAgent:navigator.userAgent, lang:document.documentElement.lang
+  };
+
+  // If you have API endpoint — send JSON
+  if(API_ENDPOINT){
+    try{
+      busy(true);
+      const res = await fetch(API_ENDPOINT, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify(payload)
+      });
+      busy(false);
+      if(res.ok){
+        showAlert(true, currentDict.ok + ticketId());
+        form.reset();
+      }else{
+        showAlert(false, currentDict.err);
+      }
+    }catch(err){
+      busy(false);
+      showAlert(false, currentDict.err);
+    }
+  } else {
+    // Fallback: open mailto
+    const body =
+`Topic: ${topic}
+Name: ${payload.name||"-"}
+Email: ${payload.email}
+
+Message:
+${payload.message}
+
+UA: ${payload.userAgent}
+Lang: ${payload.lang}`;
+    const ml = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = ml;
+    showAlert(true, currentDict.ok + ticketId());
+  }
+});
+
+// mail button uses same fallback immediately
+mailBtn.addEventListener("click", ()=>{
+  const email = qs("#email").value || "";
+  const subject = qs("#subject").value || "[Support]";
+  const message = qs("#message").value || "";
+  const ml = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message + "\n\nFrom: " + email)}`;
+  window.location.href = ml;
+});
+</script>
+</body>
+</html>
